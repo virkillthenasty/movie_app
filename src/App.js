@@ -1,42 +1,50 @@
 import React from 'react';
-import Potato from './potato'
+import PropTypes from "prop-types";
 
-function Food({fav, pic}){
-  return <div>
-    <h3>I like {fav}</h3>
-    <img src= {pic} width="200px" height="150px"/>
-  </div>
-
-  
-
+class App extends React.Component{
+constructor(props){
+  super(props);
+  console.log("hello");
 }
 
-const foodILike =[
-  {
-    name : 'kimchi',
-    img : "http://recipe1.ezmember.co.kr/cache/recipe/2016/04/08/1d26c0444e724bca8ed271b24da0057a1.jpg"
-  },
-  {
-    name : 'kimbab',
-    img : "https://mykoreankitchen.com/wp-content/uploads/2006/10/3.-Korean-Kimbap-500x375.jpg"
+  state ={  //컴포넌트의 데이터를 넣는 곳
+    count: 0 ,
+  };
+
+  add = () => {
+    console.log("add");
+    this.setState(current => ({ count: current.count+1})); //current state를 호출
+    //this.state.count += 1; render를 실행하지 않아 화면이 안변함
+  };
+
+  minus = () => {
+    console.log("minus");
+    this.setState(current => ({ count: current.count-1}));
+    //this.state.count -= 1;
+  };
+
+  componentDidMount(){
+    console.log("component rendered")
   }
-];
 
-function renderFood(food){
-  console.log(food);
-  return <Food name={food.name} pic={food.img}/>
-};
+  componentDidUpdate(){
+    console.log("just updated")
+  }
+  componentWillUnmount(){
+    console.log("Unmount")
+  }
 
 
-//Component html을 반환하는 함수
-function App() {
-
-  return <div>
-      <h1>Hello React</h1>
-      {foodILike.map(renderFood)};
-      </div>
+  render(){
+    console.log("render");
+    return <div>
+      <h1>the num is {this.state.count}</h1>
+      <button onClick={this.add}> + </button>
+      <button onClick={this.minus}> - </button>
+    </div>
+    
+    
+  }
 }
-
-// 컴포넌트를 생성하여 index.html에서 출력
 
 export default App;
