@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import Movie from "./Movies"
+import "./App.css";
 
 const URL = "https://yts-proxy.now.sh/list_movies.json?sort_by=rating";
 
