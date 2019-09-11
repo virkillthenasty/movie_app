@@ -1,47 +1,62 @@
 import React from 'react';
-import PropTypes from "prop-types";
+import axios from "axios";
+import Movie from "./Movies"
+
+const URL = "https://yts-proxy.now.sh/list_movies.json?sort_by=rating";
 
 class App extends React.Component{
-constructor(props){
-  super(props);
-  console.log("hello");
-}
-
   state ={  //컴포넌트의 데이터를 넣는 곳
-    count: 0 ,
+    isLoading: true,
+    movies: []
   };
 
-  add = () => {
-    console.log("add");
-    this.setState(current => ({ count: current.count+1})); //current state를 호출
-    //this.state.count += 1; render를 실행하지 않아 화면이 안변함
+  getMovies = async () => {
+    //const movies = await axios.get(URL);
+    const {data: { data : {movies}}} = await axios.get(URL);
+    //this.setState({isLoading: false});
+    console.log(movies)
+    this.setState({movies, isLoading: false});
   };
 
-  minus = () => {
-    console.log("minus");
-    this.setState(current => ({ count: current.count-1}));
-    //this.state.count -= 1;
-  };
-
-  componentDidMount(){
-    console.log("component rendered")
+  componentDidMount(){ // render 실행 직후 수행
+    this.getMovies();
   }
-
-  componentDidUpdate(){
-    console.log("just updated")
-  }
-  componentWillUnmount(){
-    console.log("Unmount")
-  }
-
 
   render(){
     console.log("render");
-    return <div>
-      <h1>the num is {this.state.count}</h1>
-      <button onClick={this.add}> + </button>
-      <button onClick={this.minus}> - </button>
-    </div>
+    const { isLoading, movies} = this.state;
+
+    return (
+      <section className="container">
+        {isLoading ? (
+          <div className="loader">
+            <span className="loader_text">Loading...</span>
+          </div>
+          ): 
+          (
+            <div className="movies">
+              {
+                movies.map(movie => {
+                  return <Movie 
+                    key={movie.id}
+                    id={movie.id} 
+                    year={movie.year} 
+                    title={movie.title} 
+                    summary={movie.summary} 
+                    poster={movie.medium_cover_image}
+                    genres={movie.genres}
+                  />
+                  })
+              }
+            </div>
+            
+          )
+        }
+        
+
+      </section>
+
+    )
     
     
   }
